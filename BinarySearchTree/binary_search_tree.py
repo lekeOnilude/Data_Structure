@@ -1,5 +1,6 @@
 # Builing a Binary Search Tree from Scrach
 
+import pdb
 
 class Node():
 
@@ -22,7 +23,7 @@ class BinarySearchTree():
 
         if node == None: # check if the tree is empty
             node = Node(None, None, elem)
-            #tree.append(node.data)
+
         else:
             
             if elem > node.data:
@@ -42,32 +43,64 @@ class BinarySearchTree():
     def remove(self, elem, node):
         #node = self.find(elem, node)
 
-        if self.find(elem, node) == None:
-            return
+        if node == None:
+            return None
         
         if elem > node.data:
-            node = self.find(elem, node.right)
+            node.right = self.remove(elem, node.right)
         elif elem < node.data:
-            node = self.find(elem, node.left)
+            node.left = self.remove(elem, node.left)
         else:
 
-            if node.right == None and node.left == None:
-                node.data = None
-            elif node.right != None and node.left == None:
-                node = node.right
+            # if node.right == None and node.left == None:
+            #     breakpoint()
+            #     node.data = None
+            #     breakpoint()
+            #     return
 
-                #node.right = None
-                print(node.data)
-            elif node.left != None and node.right == None:
-                node = node.left
-                node.left = None
+            #     #node.data = None
+            #     #print(node.data)
+
+            if node.left == None:
+                rightChild = node.right
+
+                node.data = None
+                node = None
+
+                return rightChild
+
+                # node.data = node.right.data
+                # node.right = node.right.right
+                # node.left = node.right.left
+
+                # return
+
+            elif node.right == None:
+
+                leftChild = node.left
+                node.data = None
+                node = None
+                return leftChild
+
+                # node.data = node.left.data
+                # node.left = node.left.left
+                # node.right = node.left.right
+
+                # return
+    
             elif node.right != None and node.left != None:
                 #node_Remove = node
-                farleft = self.farleft(node)
-                print(farleft.data+"#hhhh")
-                node.data = farleft.data
-                self.remove(farleft.data, node)
+                
+                
+                farleft = self.findMin(node).data
+                #breakpoint()
+                leftChild = self.remove(farleft, node)
+                #breakpoint()
+                node.data = farleft
+
+                return leftChild
         
+        #self.cleanUp(node)
         return node
 
 
@@ -84,25 +117,43 @@ class BinarySearchTree():
             node = self.find(elem, node.left)
         
         return node
+
+    def cleanUp (self, node):
+        
+        # if node.left != None:
+        #     if node.left.data == None:
+        #         node.left = None
+        # elif node.right != None:
+        #     if node.right.data == None:
+        #         node.right = None
+
+        if node == None or node == None:
+            return
+ 
+        self.cleanUp(node.left)
+
+        #self.cleanUp(node.right)
         
         
     
+    # search far left as far as possible
+    def findMin (self, node):
+        if node.left == None:
+            return node
+        else:
+            lowestValue = self.findMin(node.left)
 
-    def farleft (self, node):
-        if node == None:
-            return
-            
-        node = self.farleft(node.left)
-
-        return node
+        return lowestValue
         
     
 
     def preorder (self, node):
         if node == None:
             #print(None)
+
             return
-        print(node.data)
+        else:
+            print(node.data)
 
         self.preorder(node.left)
         self.preorder(node.right)
@@ -125,14 +176,12 @@ if __name__ == "__main__":
     bst.add(2)
     bst.add(70)
     bst.add(10)
+    bst.add(35)
+    bst.add(1)
+
     
+    #print(bst.findMin(node).data)
     
-
-    result = bst.find(2, node)
-    print(result.data)
-
-    #bst.preorder(node)
-
-    #remove = bst.remove(30, node)
-
-    #bst.preorder(remove)
+    bst.preorder(node)
+    remove = bst.remove(20, node)
+    bst.preorder(node)
