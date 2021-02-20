@@ -29,7 +29,7 @@ class Queue():
 
     def _enqueue(self, data, node: Node):
 
-        if node == None:
+        if node == None or node.data == None:
             node = self.Node(None, data, None)
             self._front(node)
         else:
@@ -43,7 +43,6 @@ class Queue():
     def enqueue(self, data):
 
         self.back = self._enqueue(data, self.back)
-
         return self.back
     
     def dequeue(self):
@@ -63,6 +62,10 @@ class Queue():
 
         return result
 
+    def peek(self):
+
+        return self.front.data
+
     
     def _displayQueue(self, node):
 
@@ -75,13 +78,12 @@ class Queue():
         self.display.append(node.data)
         self._displayQueue(node.down)
         
-
-
+        
     def displayQueue(self):
         self._displayQueue(self.front)
         result = self.display
 
-        self.display= []
+        self.display = []
         return result
 
 
@@ -95,8 +97,8 @@ if __name__ == "__main__":
     queue.enqueue(40)
     queue.enqueue(50)
 
-    
 
+    print(queue.peek())
     print(queue.displayQueue())
 
     print(queue.dequeue())
@@ -105,8 +107,10 @@ if __name__ == "__main__":
     print(queue.dequeue())
     print(queue.dequeue())
 
+    queue.enqueue(500)
+
     print(queue.displayQueue())
 
-    print(queue.front.data)
+    print(queue.peek())
     print(queue.back.data)
 
